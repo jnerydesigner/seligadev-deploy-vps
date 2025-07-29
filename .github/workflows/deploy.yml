@@ -21,3 +21,13 @@ jobs:
           source: "."
           target: "/root/projects/seligadev-deploy-vps"
           strip_components: 1
+
+      - name: Instalar as dependências
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{secrets.HOST}}
+          username: ${{secrets.USERNAME}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
+            cd /root/projects/seligadev-deploy-vps
+            yarn build
