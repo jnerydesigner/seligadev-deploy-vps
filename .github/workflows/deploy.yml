@@ -30,4 +30,25 @@ jobs:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
             cd /root/projects/seligadev-deploy-vps
+            yarn install
+
+      - name: Criando o Build
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{secrets.HOST}}
+          username: ${{secrets.USERNAME}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
+            cd /root/projects/seligadev-deploy-vps
             yarn build
+
+      - name: Start do Projeto via PM2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{secrets.HOST}}
+          username: ${{secrets.USERNAME}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
+            cd /root/projects/seligadev-deploy-vps
+            pm2 update seligadev-vps-deploy || true
+            pm2 start pm2-start.json --update-env || pm2 restart pm2-start.json --update-env
